@@ -116,3 +116,23 @@ The system will allow users to:
 - The system should be built using web development technologies (HTML, CSS, JavaScript).
 - Server-side functionality should use technologies like Node.js, Django, or Ruby on Rails.
 - The database should be capable of storing user data, manga posts, and images (e.g., MySQL, MongoDB).
+
+### SERVICE
+
+| method  | path                            | authen | params | query | body                                      |
+|---------|---------------------------------|--------|--------|-------|------------------------------------------|
+| POST    | /auth/login                     | -      | -      | -     | { email, password }                      |
+| POST    | /auth/register                  | -      | -      | -     | { username, email, password }            |
+| PATCH   | /auth/forget-password           | -      | -      | -     | { email }                                |
+| PATCH   | /auth/edit-profile              | y      | -      | -     | { username, bio, avatar }                |
+| POST    | /favourite                      | y      | -      | -     | { mangaId }                              |
+| GET     | /favourite                      | y      | -      | -     | -                                        |
+| POST    | /cartoon                        | y      | -      | -     | { title, description, coverImage }       |
+| POST    | /cartoon/:id/chapter            | y      | :id    | -     | { chapterTitle, content }                |
+| GET     | /cartoon                        | -      | -      | -     | -                                        |
+| GET     | /cartoon/:id                    | -      | :id    | -     | -                                        |
+| DELETE  | /cartoon/:id                    | y      | :id    | -     | -                                        |
+| GET     | /cartoon/all                    | -      | -      | -     | -                                        |
+| PATCH   | /admin/role                     | y      | -      | -     | { userId, role }                         |
+| DELETE  | /admin/cartoon/:id              | y      | :id    | -     | -                                        |
+| GET     | /admin/cartoon/all              | y      | -      | -     | -                                        |
