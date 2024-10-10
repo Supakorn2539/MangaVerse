@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Allmanga = () => {
+const Profile = () => {
   return (
     <div className=''>
       
@@ -8,4 +8,4 @@ const Allmanga = () => {
   )
 }
 
-export default Allmanga
+export default Profile

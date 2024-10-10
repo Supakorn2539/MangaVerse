@@ -128,7 +128,7 @@ The system will allow users to:
 | POST    | /favourite                      | y      | -      | -     | { mangaId }                              |
 | GET     | /favourite                      | y      | -      | -     | -                                        |
 | POST    | /cartoon                        | y      | -      | -     | { title, description, coverImage }       |
-| POST    | /cartoon/:id/chapter            | y      | :id    | -     | { chapterTitle, content }                |
+| POST    | /cartoon/:id/chapter            | y      | :id    | -     | { chapterTitle, content, Images }                |
 | GET     | /cartoon                        | -      | -      | -     | -                                        |
 | GET     | /cartoon/:id                    | -      | :id    | -     | -                                        |
 | DELETE  | /cartoon/:id                    | y      | :id    | -     | -                                        |
