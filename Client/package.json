@@ -10,7 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
+    "@mantine/carousel": "^7.13.3",
+    "@mantine/core": "^7.13.3",
+    "@mantine/hooks": "^7.13.3",
     "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "embla-carousel-autoplay": "^7.1.0",
+    "embla-carousel-react": "^7.1.0",
+    "heroicons-react": "^1.4.1",
     "joi": "^17.13.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -19,6 +27,7 @@
     "react-router-dom": "^6.26.2",
     "react-timeago": "^7.2.0",
     "react-toastify": "^10.0.5",
+    "sweetalert2": "^11.14.3",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {

@@ -1,72 +1,89 @@
-import {create} from "zustand"
-import {toast} from 'react-toastify'
-import { register,login, getMe } from "../api/auth-api"
-import {createJSONStorage, persist} from 'zustand/middleware'
-const useAuthStore = create(persist((set)=>({
-    name : "Manga",
-    user : null,
-    token : null,
-    actionRegister : async (form)=>{
-        try {
-            //code
-            // console.log('action register in Zustand')
-            const resp = await register(form)
-            console.log(resp)
-            toast.success(resp)
-        } catch (err) {
-            //err
-        
-            toast.error(err.response.data.message)
-        }
-    },
-    getMe : async ()=>{
-        try {
-            
-     
-            const resp = await getMe()
-           
-            set({
-                user : resp.data.user,
-                
-            })
-            
-            return resp
-        } catch (err) {
-            
-            console.log(err)
-            // toast.error(err.response.data.message)
-        }
-    },
-    actionLogin : async (form)=>{
-        try {
-            //code
-     
-            const resp = await login(form)
-            console.log('object',resp)
-           
-            set({
-                user : resp.data.user,
-                token : resp.data.token
-            })
-            localStorage.setItem("ACCESS_TOKEN", resp.data.token)
-            // toast.success(resp.data.token)
-            return resp.data.user.user.role
-        } catch (err) {
-            //err
-            console.log(err)
-            // toast.error(err.response?.data?.message)
-        }
-    },
-    actionLogout : ()=> {
-        localStorage.clear()
-        set({user : null, token : null})
+import { create } from 'zustand';
+import { toast } from 'react-toastify';
+import axios from '../config/axios';
+
+
+const useAuthStore = create((set, get) => ({
+  name: 'Manga',
+  user: null,
+
+  actionRegister: async (form) => {
+    try {
+      const result = await axios.post('/auth/register',form);
+      toast.success("Register Complete");
+    } catch (err) {
+      const errMsg = err.response?.data?.message
+      toast.error(errMsg, { position: 'bottom-center' });
     }
-})
-// ,{
-//     name : 'user-store',
-//     storage : createJSONStorage(()=> localStorage),
-//     partialize: (state) => (state.token )
-// }
-)
-)
-export default useAuthStore
+  },
+  currentUser: async () => {
+    try {
+      const result = await axios.get('/auth/current-user')
+      set({
+        user: result.data.user,
+      });
+
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  actionLogin: async(form) => {
+      const result = await axios.post('/auth/login',form)
+      localStorage.setItem('ACCESS_TOKEN', result.data.token);
+      // await get().currentUser();
+      return result.data.user.user;
+     
+     
+      
+
+
+      // console.log(result)
+
+      
+      // const errMsg = err.response?.data?.error
+      // console.log(errMsg)
+      
+    
+  },
+  actionLogout: () => {
+    localStorage.removeItem('ACCESS_TOKEN')
+    set({ user: null, token: "" });
+
+  },
+  getLink: async (body) => {
+    try {
+      const result = await axios.post("/auth/resetpassword", body)
+      toast.success("Reset link sent!", { position: 'bottom-center' });
+    } catch (err) {
+      const errMsg = err.response?.data?.error
+      console.log(errMsg)
+      toast.error(errMsg, { position: 'bottom-center' })
+    }
+  },
+  resetPassword: async (body) => {
+    try {
+      const result = await axios.put("/auth/resetpassword/", body)
+
+    } catch (err) {
+      const errMsg = err.response?.data?.error
+      console.log(errMsg)
+      toast.error(errMsg, { position: 'bottom-center' })
+    }
+  },
+  editProfile : async(body) => {
+    try {
+      // console.log('helo')
+      const result = await axios.patch("/auth/editProfile",body)
+      // console.log(result)
+      const updatedUser = result.data
+      set({user : updatedUser})
+    } catch (err) {
+      const errMsg = err.response?.data?.error
+      console.log(errMsg)
+      toast.error(errMsg, { position: 'bottom-center' })
+    }
+  }
+}));
+
+export default useAuthStore;

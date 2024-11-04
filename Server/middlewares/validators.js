@@ -76,5 +76,6 @@ const validateSchema = (schema) => (req, res, next) => {
 }
 
 
+
 exports.registerValidator = validateSchema(registerSchema)
 exports.loginValidator = validateSchema(loginSchema)

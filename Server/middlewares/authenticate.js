@@ -4,8 +4,8 @@ const tryCatch = require("../utils/tryCatch");
 const prisma = require("../config/prisma");
 
 
-exports.auth = tryCatch(async(req,res,next)=>{
-   
+module.exports.auth = tryCatch(async(req,res,next)=>{
+  //  console.log("asdsadasdsadsaasdmaslkfjsalfjaflk")
         // const authHeader = req.headers.authorization;
         // if(!authHeader){    
         //     return createError(401,"Token Missing")
@@ -22,13 +22,14 @@ exports.auth = tryCatch(async(req,res,next)=>{
 
 
         const authorization = req.headers.authorization;
+        // console.log(authorization,"asdadskahdsahsjdahsjashdkashdakshdksajhdksajhdksajdhkjsads")
         if (!authorization || !authorization.startsWith('Bearer ')) {
           createError({
             message: 'unauthenticated',
             statusCode: 401
           });
         }
-    // console.log('sdsdsd',authorization)
+  
         const accessToken = authorization.split(' ')[1];
         if(accessToken === null){
             createError({
@@ -37,11 +38,12 @@ exports.auth = tryCatch(async(req,res,next)=>{
               });
               return
         }
-        console.log("object",accessToken)
+        // console.log("object",accessToken)
 
         const payload = jwt.verify(accessToken, process.env.SECRET_KEY);
         
         // console.log(payload,'111111111111111111111111111111')
+        // console.log(payload)
         const user = await prisma.user.findUnique({ where: { id: payload.user.id } });
         if (!user) {
           createError({
@@ -49,9 +51,9 @@ exports.auth = tryCatch(async(req,res,next)=>{
             statusCode: 400
           });
         }
-    
+        
         delete user.password;
-    
+        
         req.user = user;
         next();
    

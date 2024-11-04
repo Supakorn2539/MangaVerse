@@ -1,129 +1,148 @@
-import React, { useState, useEffect } from 'react';
 
-const Home = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Automatically change slides every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 3000); // 3000 ms = 3 seconds
+  import React, { useState, useEffect, useRef } from 'react';
+  import useMangaStore from '../zustand/manga-store';
+  import '@mantine/carousel/styles.css';
+  import Autoplay from 'embla-carousel-autoplay';
+  import { Carousel } from '@mantine/carousel';
+  import { useNavigate } from 'react-router-dom';
+  import { FavoriteIcon, UnFavoriteIcon } from '../icons';
+  import useAuthStore from '../zustand/auth-store';
+  import axios from '../config/axios';
 
-    return () => clearInterval(interval); // Clear interval on unmount
-  }, []);
+  const Home = () => {
+    const navigate = useNavigate();
+    const getAllManga = useMangaStore(state => state.getAllManga);
+    const mangas = useMangaStore(state => state.mangas);
 
-  // Function to change the slide manually
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
+    // const user = useAuthStore(state => state.user)
+    const autoplay = useRef(Autoplay({ delay: 5000 }));
+    // console.log(user)
+    const [mangaPack,setMangaPack]= useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const hdlOnClick = (mangaId) => {
+      navigate(`/manga/${mangaId}`);
+    };
+    // console.log(mangas)
+    const fetchAllManga = async (page) => {
+      try {
+        await getAllManga();
+        
+        // console.log('object')
+        const result = await axios.get(`/manga/getMangaPagination?page=${page}&limit=12`)
+        // console.log('object2')
+        setTotalPages(result?.data?.totalPages)
+        setMangaPack(result?.data?.allManga)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+   
+    useEffect(() => {
+      fetchAllManga(currentPage);
+    }, [currentPage]);
 
-  const featuredManga = [
-    { title: 'Solo Leveling', image: '/api/placeholder/150/200' },
-    { title: 'Mount Hua Sect', image: '/api/placeholder/150/200' },
-    { title: 'The Academic Sylph', image: '/api/placeholder/150/200' },
-    { title: 'Eleceed', image: '/api/placeholder/150/200' },
-  ]
+    return (
+      <div className="min-h-screen ">
+        <div style={{backgroundColor : "rgba(255,255,255,0.3)"}}>
+          
+        {/* Hero Carousel */}
+        <div className="relative w-full max-w-5xl mx-auto mt-8 rounded-lg overflow-hidden shadow-2xl">
+          <Carousel
+            withIndicators
+            height={300}
+            plugins={[autoplay.current]}
+            onMouseEnter={autoplay.current.stop}
+            onMouseLeave={autoplay.current.reset}
+          >
+            <Carousel.Slide className="bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+              <h2 className="text-white text-3xl font-bold">Explore the Latest Manga!</h2>
+            </Carousel.Slide>
+            <Carousel.Slide className="bg-gradient-to-r from-green-400 to-blue-400 flex items-center justify-center">
+              <h2 className="text-white text-3xl font-bold">Discover New Adventures</h2>
+            </Carousel.Slide>
+            <Carousel.Slide className="bg-gradient-to-r from-yellow-400 to-orange-400 flex items-center justify-center">
+              <h2 className="text-white text-3xl font-bold">Your Favorite Manga Awaits</h2>
+            </Carousel.Slide>
+            
+          </Carousel>
+        </div>
 
-  const slides = [
-    { id: 1, image: '/path/to/image1.jpg', title: 'Slide 1', text: 'Description for slide 1' },
-    { id: 2, image: '/path/to/image2.jpg', title: 'Slide 2', text: 'Description for slide 2' },
-    { id: 3, image: '/path/to/image3.jpg', title: 'Slide 3', text: 'Description for slide 3' }
-  ];
-  const Allmanga = () => {
-    const featuredManga = [
-      { title: 'Solo Leveling', image: '/api/placeholder/150/200' },
-      { title: 'Mount Hua Sect', image: '/api/placeholder/150/200' },
-      { title: 'The Academic Sylph', image: '/api/placeholder/150/200' },
-      { title: 'Eleceed', image: '/api/placeholder/150/200' },
-    ]
-  };
-  const allManga = [
-    ...featuredManga,
-    { title: 'Reawakened Man', image: '/api/placeholder/150/200' },
-    { title: 'Swordmaster', image: '/api/placeholder/150/200' },
-    { title: 'Return of Immortal', image: '/api/placeholder/150/200' },
-    { title: 'The Genius', image: '/api/placeholder/150/200' },
-    { title: 'Noblesse', image: '/api/placeholder/150/200' },
-    { title: 'Soul Land', image: '/api/placeholder/150/200' },
-    { title: 'Tokyo Ghoul', image: '/api/placeholder/150/200' },
-    { title: 'Overlord', image: '/api/placeholder/150/200' },
-  ];
-  return (
-    <div>
-      <div className="relative  w-full max-w-4xl mx-auto">
-        <div className="overflow-hidden relative">
-          {/* Slideshow Images */}
-          <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-            {slides.map((slide) => (
-              <div key={slide.id} className="w-full flex-shrink-0">
-                <img src={slide.image} alt={slide.title} className="w-full h-[300px] object-cover" />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4 text-white">
-                  <h2 className="text-xl font-bold">{slide.title}</h2>
-                  <p>{slide.text}</p>
+        {/* Featured Manga Section */}
+        <div className="my-12 px-4">
+          <h2 className="text-4xl font-semibold text-center text-pink-700 mb-8">
+            การ์ตูนยอดฮิต
+          </h2>
+          <div className="flex gap-6 justify-evenly">
+            {mangas?.sort((a, b) => b.views-a.views)
+              .slice(0, 4)
+              .map((manga, index) => (
+                <div 
+                  key={index} 
+                  onClick={() => hdlOnClick(manga.id)}
+                  className="bg-white rounded-lg shadow-lg w-[200px] flex flex-col  relative transition-transform duration-300 hover:scale-105 cursor-pointer"
+                > 
+                  <div className='flex'>
+
+                  <img src={manga.imageUrl} alt={manga.mangaName} className="w-[200px] h-[200px] object-fit" />
+                  </div>
+                  <div className="p-4 h-auto">
+                    <h3 className="text-lg font-medium text-gray-800">{manga.mangaName}</h3>
+                    <p className="text-sm text-gray-500">{manga.views} views</p>
+                    <div className="flex justify-between items-center mt-2">
+                      {/* <UnFavoriteIcon className="w-6 h-6 text-gray-400" />
+                      <FavoriteIcon className="w-6 h-6 text-pink-600" /> */}
+                    </div>
+                  </div>
+                </div>
+            ))}
+          </div>
+        </div>
+
+        {/* All Manga Section */}
+        <div className="my-12 px-4">
+          <h2 className="text-4xl font-semibold text-center text-pink-700 mb-8">
+            การ์ตูนอัพเดท
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {mangaPack?.map((manga, index) => (
+              <div
+                key={index}
+                onClick={() => hdlOnClick(manga.id)}
+                className="bg-white rounded-lg shadow-lg w-[200px] overflow-hidden relative transition-transform duration-300 hover:scale-105 cursor-pointer"
+                >
+                <div className='flex'>
+
+                <img src={manga.imageUrl} alt={manga.mangaName} className="w-[200px] h-[200px] object-fit" />
+                </div>
+                <div className='p-4'>
+                  <h3 className=" font-medium overflow-auto text-gray-800">{manga.mangaName}</h3>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Navigation Dots */}
-        <div className="absolute bottom-5 left-0 right-0 flex justify-center space-x-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`w-3 h-3 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-gray-400'}`}
-              onClick={() => goToSlide(index)}
-            ></button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Featured Manga</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {featuredManga.map((manga, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src={manga.image} alt={manga.title} className="w-full h-48 object-cover" />
-                <div className="p-2">
-                  <h3 className="text-sm font-medium truncate">{manga.title}</h3>
-                </div>
-              </div>
+        {/* Pagination */}
+        <section className="mt-12 mb-12 flex justify-center items-center space-x-2">
+          <div className="flex space-x-2">
+            {[...Array(totalPages)].map((_, page) => (
+              <button
+              key={page + 1}
+              onClick={() => setCurrentPage(page + 1)}
+              className={`w-10 h-10 flex items-center justify-center rounded-full 
+                            ${currentPage === page + 1 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'}`}
+                            >
+                {page + 1}
+              </button>
             ))}
           </div>
         </section>
-      </div>
-
-      <div>
-        <section className='h-fit'>
-          <h2 className="text-xl font-semibold mb-4">All Manga</h2>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 h-fit">
-            {allManga.map((manga, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden h-fit">
-                <img src={manga.image} alt={manga.title} className="w-full h-48 object-cover" />
-                <div className="p-2">
-                  <h3 className="text-sm font-medium truncate">{manga.title}</h3>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
-      <section className="mt-8 flex justify-center items-center space-x-2">
-        <div className="flex space-x-1">
-          {[1, 2, 3].map((page) => (
-            <button
-              key={page}
-              className={`w-8 h-8 flex items-center justify-center rounded-full 
-                          ${page === 1 ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'}`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-      </section>
-    </div>
-  )
-}
+    );
+  };
 
-export default Home
+  export default Home;
+

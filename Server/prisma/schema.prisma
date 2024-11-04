@@ -15,6 +15,7 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 enum Role {
   ADMIN
   USER
@@ -27,8 +28,10 @@ model User {
   email                String     @unique
   firstName            String
   lastName             String
-  role                 Role @default(USER)
-  coverProfileImageUrl String?
+  role                 Role       @default(USER)
+  isActive        Boolean @default(true)
+  profileImage String?
+  mangas               Manga[]
   favorites            Favorite[]
 }
 
@@ -42,15 +45,18 @@ model Favorite {
 }
 
 model Manga {
-  id          Int        @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   mangaName   String
   description String
   imageUrl    String
-  createdAt   DateTime   @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime   @updatedAt @db.Timestamp(0)
-  views       Int
-  favorites   Favorite[]
-  chapters    Chapter[]
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+  views       Int? @default(0)
+
+  favorites Favorite[]
+  chapters  Chapter[]
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?
 }
 
 model Chapter {
