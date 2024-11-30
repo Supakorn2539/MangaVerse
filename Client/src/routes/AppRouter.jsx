@@ -9,7 +9,7 @@ import PageNotFound from '../pages/authUser/PagenotFound';
 import AllManga from '../components/AllManga'
 import Home from '../pages/Home';
 import Profile from '../pages/authUser/Profile';
-import MyFavorite from '../pages/authUser/MyFavorite'
+
 import ManageManga from '../pages/authUser/ManageManga'
 import ProtectRoute from './ProtectRoute';
 import LoginProtectRoute from './LoginProtectRoute';
@@ -43,10 +43,7 @@ const router = createBrowserRouter([
       { path: 'Profile', element : <CheckAuthRoute element={<Profile />} />
 
       },
-      {
-        path: 'MyFavorite',
-        element: <CheckAuthRoute element={<MyFavorite />} />
-      },
+     
       {
         path: 'ManageManga',
         element: <CheckAuthRoute element={<ManageManga />} />

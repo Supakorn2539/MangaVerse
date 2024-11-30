@@ -29,7 +29,7 @@ const UserHeader = () => {
 
     }
     return (
-        <div className='bg-gradient-to-r from-pink-200 to-pink-300'>
+        <div className='fixed top-0 left-0 right-0 z-10 bg-gradient-to-r from-pink-200 to-pink-300'>
             <div
                 style={{
                     backgroundColor: "rgba(255,255,255,0.6)", // Softer, semi-transparent background
@@ -73,9 +73,6 @@ const UserHeader = () => {
                             <ul tabIndex={0} className="dropdown-content menu bg-white rounded-lg shadow-lg w-52 p-2 mt-2">
                                 <li>
                                     <Link to="/Profile">Profile</Link>
-                                </li>
-                                <li>
-                                    <Link to="/MyFavorite">My favorite</Link>
                                 </li>
                                 <li>
                                     <Link to="/ManageManga">Manage Manga</Link>

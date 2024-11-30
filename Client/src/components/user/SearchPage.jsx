@@ -19,12 +19,12 @@ const SearchPage = () => {
                         <div
                             onClick={() => hdlOnClick(manga.id)}
                             key={manga.id}
-                            className="bg-white rounded-lg shadow-lg p-4 cursor-pointer w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+                            className="bg-white rounded-lg shadow-lg p-4 cursor-pointer w-full  sm:w-1/2 md:w-1/3 lg:w-1/4"
                         >
                             {manga.imageUrl && (
                                 <img
                                     src={manga.imageUrl}
-                                    className="w-full h-48 object-cover rounded"
+                                    className="w-full h-50 object-cover rounded"
                                 />
                             )}
                             <h2 className="text-xl font-semibold mt-2 text-center">{manga.mangaName}</h2>

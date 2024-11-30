@@ -60,7 +60,7 @@ const AddManga = () => {
     };
 
     return (
-        <div className='m-auto max-w-lg p-6 rounded-lg flex flex-col gap-4' style={{ backgroundColor: "rgba(255, 245, 245, 0.8)" }}>
+        <div className='  mx-auto my-32 max-w-lg p-6 rounded-lg flex flex-col gap-6' style={{ backgroundColor: "rgba(255, 245, 245, 0.8)" }}>
             <div className='text-center'>
                 <p className='text-pink-600 font-semibold text-xl'>หน้าปก</p>
             </div>
@@ -87,7 +87,8 @@ const AddManga = () => {
                             )}
                         </div>
                     </div>
-                    <div className='flex gap-3 items-center'>
+                    <div className='flex flex-col gap-6 my-10'>
+                        <div className='flex gap-6 items-center'>
                         <p className='text-pink-600 font-semibold'>Title:</p>
                         <input
                             type="text"
@@ -107,6 +108,8 @@ const AddManga = () => {
                             rows={message.split("\n").length || 4}
                         />
                     </div>
+                    </div>
+                    
                 </form>
             </div>
 

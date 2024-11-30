@@ -55,8 +55,8 @@ const Profile = () => {
   };
 
   return (
-    <div className='h-[calc(100vh-218px)] w-2/4 mx-auto' style={{ marginBottom: '8px', backgroundColor: 'rgba(251,231,239,0.5)', borderRadius: '8px' }}>
-      <div className='flex flex-col gap-3 items-center justify-center'>
+    <div className=' w-2/4 mx-auto py-20  flex flex-col gap-6 items-center justify-center mt-20'  style={{ marginBottom: '8px', backgroundColor: 'rgba(251,231,239,0.5)', borderRadius: '8px' }}>
+     
         <div className='rounded-full w-32 h-32 bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer' onClick={() => document.getElementById("input-file").click()}>
           {image ? (
             <img src={URL.createObjectURL(image)} className='w-full h-full object-cover' />
@@ -101,7 +101,7 @@ const Profile = () => {
         </div>
         <button onClick={() => setIsEdit(prv => !prv)} className='btn btn-primary w-1/6'>{isEdit ? 'Save' : 'Edit'}</button>
         {isEdit && <button onClick={hdlEdit} className='btn btn-secondary w-1/6'>Submit5555</button>}
-      </div>
+      
     </div>
   );
 };

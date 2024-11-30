@@ -10,8 +10,10 @@ const AllManga = () => {
   const hdlOnClick = (mangaId) =>{
     navigate(`/manga/${mangaId}`)
   }
+  
   const fetchAllManga = async()=>{
     try {
+      
       await getAllManga()
     } catch (err) {
       console.log(err)
@@ -19,6 +21,7 @@ const AllManga = () => {
   }
   useEffect(()=>{
     fetchAllManga()
+   
   },[])
   // console.log(mangas)
   return (
@@ -34,7 +37,7 @@ const AllManga = () => {
             <img
               src={manga?.imageUrl}
               alt={manga?.mangaName}
-              className=" h-[200px]  object-cover"
+              className=" h-[300px]  object-cover "
             />
             <div className="p-4">
               <h2 className="text-xl font-bold mb-2 text-pink-500">{manga?.mangaName}</h2>
