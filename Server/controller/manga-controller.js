@@ -230,8 +230,13 @@ module.exports.getAllPages = tryCatch(async(req,res,next)=>{
         chapterNo : +chapterNo
         }, include : {pages : true }
     })
-    console.log(chapter)
-    res.status(200).json({chapter})
+    const totalChapters = await prisma.chapter.count({
+        where : {
+            mangaId : +id
+        }
+    })
+    console.log(totalChapters)
+    res.status(200).json({chapter,totalChapters})
 })
 
 module.exports.getAllManga = tryCatch(async(req,res,next)=>{
@@ -304,9 +309,9 @@ module.exports.increaseViews = tryCatch(async (req, res, next) => {
 
     if (!manga) return res.status(404).send("Manga not found");
   
-    // Update the views count
+    
     const updatedManga = await prisma.manga.update({
-      where: { id: Number(mangaId) },
+      where: { id: +mangaId},
       data: {
         views: manga.views + 1,
       },
