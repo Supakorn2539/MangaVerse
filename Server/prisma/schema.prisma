@@ -33,6 +33,8 @@ model User {
   profileImage String?
   mangas               Manga[]
   favorites            Favorite[]
+
+  @@map("user")
 }
 
 model Favorite {
@@ -42,6 +44,7 @@ model Favorite {
   manga   Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
 
   @@id([userId, mangaId])
+  @@map("favorite")
 }
 
 model Manga {
@@ -57,6 +60,7 @@ model Manga {
   chapters  Chapter[]
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int?
+  @@map("manga")
 }
 
 model Chapter {
@@ -69,6 +73,7 @@ model Chapter {
   mangaId      Int
   manga        Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
   pages        Page[]
+  @@map("chapter")
 }
 
 model Page {
@@ -77,4 +82,5 @@ model Page {
   imageUrl   String
   chapterId  Int
   chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  @@map("page")
 }
