@@ -24,7 +24,7 @@ const SearchPage = () => {
                             {manga.imageUrl && (
                                 <img
                                     src={manga.imageUrl}
-                                    className="w-full h-50 object-cover rounded"
+                                    className="w-full h-50   object-cover rounded"
                                 />
                             )}
                             <h2 className="text-xl font-semibold mt-2 text-center">{manga.mangaName}</h2>

@@ -50,11 +50,11 @@ const ChapterManage = ({isViewOnly}) => {
 
   useEffect(() => {
     fetchData();
-    incrementViews()
-  }, []);
+    incrementViews(mangaId)
+  }, [mangaId]);
 
   useEffect(() => {
-    if (!isViewOnly && data?.manga && user.id !== data.manga.userId) {
+    if (!isViewOnly && data.manga && user?.id && user.id !== data.manga.userId) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
